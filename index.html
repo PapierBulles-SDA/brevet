@@ -10,7 +10,7 @@
 <title>Coach Brevet 🎮</title>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Nunito:wght@400;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Nunito:wght@400;700;800;900&family=Barlow+Condensed:wght@700;900&family=Quicksand:wght@500;700&family=Fredoka+One&family=Raleway:wght@400;700&family=Exo+2:wght@400;700&display=swap" rel="stylesheet">
 <style>
 /* ══ TOKENS ══ */
 :root{
@@ -389,6 +389,67 @@ input,textarea{font-family:'Nunito',sans-serif;-webkit-user-select:text;user-sel
 .bn-ic{font-size:20px;line-height:1}
 .bn.on{color:var(--accent)}
 
+/* ══ SKINS ══ */
+[data-skin="fortnite"]{--accent:#f5d800;--accent2:#8b21e8;--gold:#f5d800;--border:rgba(245,216,0,.12)}
+[data-skin="fortnite"][data-theme="light"]{--accent:#c9a800;--accent2:#7c3aed}
+[data-skin="barbie"]{--accent:#ff0099;--accent2:#ff69b4;--gold:#ff69b4;--border:rgba(255,0,153,.12)}
+[data-skin="barbie"][data-theme="light"]{--accent:#d4007f;--accent2:#be185d;--bg:#fff0f8;--bg2:#ffe4f0;--bg3:#ffd6e9;--card:#fff}
+[data-skin="mario"]{--accent:#e52521;--accent2:#fbd000;--gold:#fbd000;--green:#43b047;--border:rgba(229,37,33,.12)}
+[data-skin="mario"][data-theme="light"]{--accent:#c41e1b;--accent2:#d4a800}
+[data-skin="montagne"]{--accent:#7dd3fc;--accent2:#94a3b8;--gold:#e2e8f0;--border:rgba(125,211,252,.12)}
+[data-skin="montagne"][data-theme="light"]{--accent:#0284c7;--accent2:#475569}
+[data-skin="aqua"]{--accent:#00e5cc;--accent2:#0ea5e9;--gold:#00e5cc;--border:rgba(0,229,204,.12)}
+[data-skin="aqua"][data-theme="light"]{--accent:#0891b2;--accent2:#0369a1}
+
+/* ── FORTNITE : sharp, agressif, uppercase ── */
+[data-skin="fortnite"]{--r:4px;--r-sm:2px;--r-lg:8px}
+[data-skin="fortnite"] body{font-family:'Barlow Condensed',sans-serif;font-size:1.06em;letter-spacing:.025em;background-image:url("data:image/svg+xml,%3Csvg width='28' height='32' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M14 2l12 7v14L14 30 2 23V9z' fill='none' stroke='rgba(245%2C216%2C0%2C.05)' stroke-width='1'/%3E%3C/svg%3E")}
+[data-skin="fortnite"] .btn-submit,[data-skin="fortnite"] .btn-next,[data-skin="fortnite"] .btn-save-obj{text-transform:uppercase;letter-spacing:.09em;border-radius:4px}
+[data-skin="fortnite"] .topnav-title,[data-skin="fortnite"] h2,[data-skin="fortnite"] .w-title,[data-skin="fortnite"] .login-title{font-family:'Barlow Condensed',sans-serif;letter-spacing:.06em;text-transform:uppercase}
+
+/* ── BARBIE : rond, doux, pop ── */
+[data-skin="barbie"]{--r:24px;--r-sm:18px;--r-lg:32px}
+[data-skin="barbie"] body{font-family:'Quicksand',sans-serif;background-image:radial-gradient(rgba(255,0,153,.055) 1.5px,transparent 1.5px);background-size:22px 22px}
+[data-skin="barbie"] .btn-submit,[data-skin="barbie"] .btn-next,[data-skin="barbie"] .btn-save-obj{border-radius:50px;letter-spacing:.03em}
+[data-skin="barbie"] .topnav-title,[data-skin="barbie"] h2,[data-skin="barbie"] .w-title,[data-skin="barbie"] .login-title{font-family:'Quicksand',sans-serif;font-weight:700}
+[data-skin="barbie"] .card,[data-skin="barbie"] .mc,[data-skin="barbie"] .choice{box-shadow:0 4px 20px rgba(255,0,153,.12)}
+
+/* ── MARIO : chunky, retro, fun ── */
+[data-skin="mario"]{--r:8px;--r-sm:6px;--r-lg:12px}
+[data-skin="mario"] body{font-family:'Fredoka One',sans-serif;background-image:linear-gradient(rgba(229,37,33,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(229,37,33,.03) 1px,transparent 1px);background-size:18px 18px}
+[data-skin="mario"] .btn-submit,[data-skin="mario"] .btn-next{border:3px solid rgba(0,0,0,.2);box-shadow:0 4px 0 rgba(0,0,0,.25);transform:translateY(0);transition:transform .1s,box-shadow .1s}
+[data-skin="mario"] .btn-submit:active,[data-skin="mario"] .btn-next:active{transform:translateY(3px);box-shadow:0 1px 0 rgba(0,0,0,.25)}
+[data-skin="mario"] .topnav-title,[data-skin="mario"] h2,[data-skin="mario"] .w-title,[data-skin="mario"] .login-title{font-family:'Fredoka One',sans-serif}
+[data-skin="mario"] .choice{border-width:2px;font-family:'Fredoka One',sans-serif}
+
+/* ── MONTAGNE : épuré, zen, concentré ── */
+[data-skin="montagne"]{--r:10px;--r-sm:8px;--r-lg:16px}
+[data-skin="montagne"] body{font-family:'Raleway',sans-serif;letter-spacing:.01em;background-image:repeating-linear-gradient(135deg,rgba(125,211,252,.025) 0,rgba(125,211,252,.025) 1px,transparent 1px,transparent 14px)}
+[data-skin="montagne"] .btn-submit,[data-skin="montagne"] .btn-next,[data-skin="montagne"] .btn-save-obj{letter-spacing:.04em;font-weight:700}
+[data-skin="montagne"] .topnav-title,[data-skin="montagne"] h2,[data-skin="montagne"] .w-title,[data-skin="montagne"] .login-title{font-family:'Raleway',sans-serif;font-weight:700;letter-spacing:.08em}
+
+/* ── AQUA : fluide, futuriste, mystérieux ── */
+[data-skin="aqua"]{--r:18px;--r-sm:12px;--r-lg:26px}
+[data-skin="aqua"] body{font-family:'Exo 2',sans-serif;background-image:repeating-linear-gradient(0deg,transparent,transparent 30px,rgba(0,229,204,.035) 30px,rgba(0,229,204,.035) 31px)}
+[data-skin="aqua"] .btn-submit,[data-skin="aqua"] .btn-next,[data-skin="aqua"] .btn-save-obj{letter-spacing:.05em;box-shadow:0 0 16px rgba(0,229,204,.2)}
+[data-skin="aqua"] .topnav-title,[data-skin="aqua"] h2,[data-skin="aqua"] .w-title,[data-skin="aqua"] .login-title{font-family:'Exo 2',sans-serif;font-weight:700;letter-spacing:.06em}
+
+/* ══ MODAL PERSO ══ */
+#modal-perso{position:fixed;inset:0;z-index:500;background:rgba(0,0,0,.7);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);display:none;align-items:flex-end}
+#modal-perso.show{display:flex}
+.perso-sheet{width:100%;background:var(--bg2);border-radius:24px 24px 0 0;padding:20px 20px calc(20px + var(--sb));max-height:85vh;overflow-y:auto}
+.perso-handle{width:40px;height:4px;background:var(--border2);border-radius:4px;margin:0 auto 20px}
+.perso-stitle{font-size:11px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:12px}
+.skin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:24px}
+.skin-card{border-radius:14px;padding:14px 8px 10px;display:flex;flex-direction:column;align-items:center;gap:6px;cursor:pointer;border:2px solid transparent;transition:border-color .15s,transform .1s;background:var(--bg3)}
+.skin-card.active{border-color:var(--accent);background:rgba(255,255,255,.05)}
+.skin-card:active{transform:scale(.94)}
+.skin-emoji{font-size:28px;line-height:1}
+.skin-name{font-size:10px;font-weight:800;color:var(--text);text-align:center}
+.skin-dots{display:flex;gap:4px;margin-top:2px}
+.skin-dot{width:9px;height:9px;border-radius:50%}
+.perso-mode-btn{width:100%;padding:14px;border-radius:var(--r);border:1px solid var(--border2);background:var(--bg3);color:var(--text);font-size:14px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px}
+
 /* ══ TOAST ══ */
 #toast{position:fixed;top:max(20px,calc(var(--st)+12px));left:50%;transform:translateX(-50%) translateY(-80px);background:linear-gradient(135deg,var(--accent2),var(--gold));padding:11px 22px;border-radius:30px;z-index:500;font-weight:800;font-size:13px;color:#fff;box-shadow:0 8px 28px rgba(0,0,0,.45);white-space:nowrap;transition:transform .32s cubic-bezier(.34,1.56,.64,1);pointer-events:none}
 #toast.show{transform:translateX(-50%) translateY(0)}
@@ -668,7 +729,14 @@ input,textarea{font-family:'Nunito',sans-serif;-webkit-user-select:text;user-sel
   <button class="bn on" id="bn-home" onclick="go('home')"><span class="bn-ic">🏠</span>Accueil</button>
   <button class="bn" id="bn-badges" onclick="go('badges');renderBadges()"><span class="bn-ic">🏅</span>Badges</button>
   <button class="bn" onclick="statsToast()"><span class="bn-ic">📊</span>Stats</button>
-  <button class="bn" onclick="toggleTheme()"><span class="bn-ic" id="bn-theme-ic">🌙</span><span id="bn-theme-lbl">Thème</span></button>
+  <button class="bn" onclick="openPerso()"><span class="bn-ic">⚙️</span><span>Style</span></button>
+</div>
+
+<!-- ════ MODAL PERSO ════ -->
+<div id="modal-perso" onclick="closePerso()">
+  <div class="perso-sheet" onclick="event.stopPropagation()">
+    <div id="perso-content"></div>
+  </div>
 </div>
 
 <script>
@@ -3010,6 +3078,61 @@ function showFlashResult() {
 // ══════════════════════════════════════════
 // THÈME
 // ══════════════════════════════════════════
+// ══════════════════════════════════════════
+// SKINS & PERSO
+// ══════════════════════════════════════════
+const SKINS = [
+  { id:'default',   name:'Cyber',    emoji:'🤖', c1:'#00d4ff', c2:'#7c3aed' },
+  { id:'fortnite',  name:'Fortnite', emoji:'⚡', c1:'#f5d800', c2:'#8b21e8' },
+  { id:'barbie',    name:'Barbie',   emoji:'🩷', c1:'#ff0099', c2:'#ff69b4' },
+  { id:'mario',     name:'Mario',    emoji:'🍄', c1:'#e52521', c2:'#fbd000' },
+  { id:'montagne',  name:'Montagne', emoji:'🏔️', c1:'#7dd3fc', c2:'#94a3b8' },
+  { id:'aqua',      name:'Aqua',     emoji:'🌊', c1:'#00e5cc', c2:'#0ea5e9' },
+];
+
+function applySkin(id) {
+  if (id === 'default') {
+    document.documentElement.removeAttribute('data-skin');
+  } else {
+    document.documentElement.setAttribute('data-skin', id);
+  }
+  try { localStorage.setItem('cb_skin', id); } catch(e) {}
+  renderPersoModal();
+}
+
+function openPerso() {
+  renderPersoModal();
+  document.getElementById('modal-perso').classList.add('show');
+}
+
+function closePerso() {
+  document.getElementById('modal-perso').classList.remove('show');
+}
+
+function renderPersoModal() {
+  const curSkin = localStorage.getItem('cb_skin') || 'default';
+  const curTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+  const cards = SKINS.map(s => `
+    <div class="skin-card ${s.id === curSkin ? 'active' : ''}" onclick="applySkin('${s.id}')">
+      <div class="skin-emoji">${s.emoji}</div>
+      <div class="skin-dots">
+        <div class="skin-dot" style="background:${s.c1}"></div>
+        <div class="skin-dot" style="background:${s.c2}"></div>
+      </div>
+      <div class="skin-name">${s.name}</div>
+      ${s.id === curSkin ? '<div style="font-size:10px;color:var(--accent)">✓ actif</div>' : ''}
+    </div>`).join('');
+  document.getElementById('perso-content').innerHTML = `
+    <div class="perso-handle"></div>
+    <div style="font-family:'Russo One';font-size:17px;margin-bottom:20px;text-align:center">⚙️ Mon style</div>
+    <div class="perso-stitle">Thème</div>
+    <div class="skin-grid">${cards}</div>
+    <div class="perso-stitle">Mode d'affichage</div>
+    <button class="perso-mode-btn" onclick="toggleTheme();renderPersoModal()">
+      ${curTheme === 'dark' ? '☀️ Passer en mode clair' : '🌙 Passer en mode sombre'}
+    </button>`;
+}
+
 function applyTheme(t) {
   document.documentElement.setAttribute('data-theme', t);
   const isDark = t === 'dark';
@@ -3037,6 +3160,8 @@ function toggleTheme() {
   // Restaurer le thème
   const savedTheme = localStorage.getItem('cb_theme') || 'dark';
   applyTheme(savedTheme);
+  const savedSkin = localStorage.getItem('cb_skin') || 'default';
+  applySkin(savedSkin);
 
   // ── Priorité 1 : lien direct ?code=XXX ──
   const urlParams = new URLSearchParams(window.location.search);
