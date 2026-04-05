@@ -2856,12 +2856,13 @@ async function saveObjConfig(enfantCode) {
   const type = document.getElementById('obj-type-select').value;
   const target = parseInt(document.getElementById('obj-target-input').value) || 2;
   try {
-    await sb.from('parents')
+    const { error } = await sb.from('parents')
       .update({ objectif_type: type, objectif_daily: target })
       .eq('enfant_code', enfantCode);
+    if (error) throw error;
     OBJ_CONFIG_PARENT = { type, target };
     toast('✅ Objectif mis à jour : ' + target + ' ' + (type === 'xp' ? 'XP' : 'missions') + ' par jour');
-  } catch(e) { toast('❌ Erreur lors de la sauvegarde'); }
+  } catch(e) { toast('❌ Erreur : ' + (e.message || 'Vérifiez la connexion')); }
 }
 
 async function grantExcuse(enfantCode) {
