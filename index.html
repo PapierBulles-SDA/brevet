@@ -2747,11 +2747,34 @@ async function createChildAccount(currentEnfantCode) {
   }
 }
 
+function clearChildLocalStorage(code) {
+  // Nettoyer toutes les clés localStorage liées à cet enfant
+  localStorage.removeItem('cb_v3_' + code);
+  localStorage.removeItem('cb_quiz_resume_' + code);
+  localStorage.removeItem('cb_obj_streak_' + code);
+  // Nettoyer les clés datées (today + excuse) — on parcourt le storage
+  const toRemove = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && (k.startsWith('cb_today_' + code + '_') || k.startsWith('cb_excuse_' + code + '_'))) {
+      toRemove.push(k);
+    }
+  }
+  toRemove.forEach(k => localStorage.removeItem(k));
+  // Si c'était le dernier code mémorisé, l'effacer aussi
+  if (localStorage.getItem('cb_last_code') === code) {
+    localStorage.removeItem('cb_last_code');
+  }
+}
+
 async function resetChildProgress(code, prenom) {
   if (!confirm(`⚠️ Réinitialiser toute la progression de ${prenom} ?\n\nXP, niveau, missions, badges, streak... tout sera effacé.\nCette action est irréversible.`)) return;
   try {
-    await sb.from('progression').delete().eq('enfant_code', code);
-    await sb.from('sessions').delete().eq('enfant_code', code);
+    const r1 = await sb.from('progression').delete().eq('enfant_code', code);
+    const r2 = await sb.from('sessions').delete().eq('enfant_code', code);
+    if (r1.error) throw r1.error;
+    if (r2.error) throw r2.error;
+    clearChildLocalStorage(code);
     toast('✅ Progression de ' + prenom + ' réinitialisée.');
     loadDashboard(code);
   } catch(e) {
@@ -2763,10 +2786,15 @@ async function deleteChild(code, prenom) {
   if (!confirm(`⚠️ Supprimer le compte de ${prenom} ?\n\nToutes ses données (progression, sessions) seront supprimées définitivement.\nCette action est irréversible.`)) return;
   if (!confirm(`Confirmer la suppression de ${prenom} ? (dernière chance)`)) return;
   try {
-    await sb.from('progression').delete().eq('enfant_code', code);
-    await sb.from('sessions').delete().eq('enfant_code', code);
-    await sb.from('parents').delete().eq('enfant_code', code);
-    await sb.from('enfants').delete().eq('code', code);
+    const r1 = await sb.from('progression').delete().eq('enfant_code', code);
+    const r2 = await sb.from('sessions').delete().eq('enfant_code', code);
+    const r3 = await sb.from('parents').delete().eq('enfant_code', code);
+    const r4 = await sb.from('enfants').delete().eq('code', code);
+    if (r1.error) throw r1.error;
+    if (r2.error) throw r2.error;
+    if (r3.error) throw r3.error;
+    if (r4.error) throw r4.error;
+    clearChildLocalStorage(code);
     _allChildrenCodes = _allChildrenCodes.filter(c => c !== code);
     toast('✅ Compte de ' + prenom + ' supprimé.');
     if (_allChildrenCodes.length > 0) {
