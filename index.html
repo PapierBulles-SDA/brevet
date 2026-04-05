@@ -2169,6 +2169,13 @@ async function loginEnfant() {
   saveCloud();
   await loadObjConfig();
   go('home');
+  // Premier login : proposer le choix de thème
+  if (!localStorage.getItem('cb_skin')) {
+    setTimeout(() => {
+      renderPersoModal(true);
+      document.getElementById('modal-perso').classList.add('show');
+    }, 600);
+  }
 }
 
 // ══════════════════════════════════════════
@@ -3109,7 +3116,7 @@ function closePerso() {
   document.getElementById('modal-perso').classList.remove('show');
 }
 
-function renderPersoModal() {
+function renderPersoModal(firstTime = false) {
   const curSkin = localStorage.getItem('cb_skin') || 'default';
   const curTheme = document.documentElement.getAttribute('data-theme') || 'dark';
   const cards = SKINS.map(s => `
@@ -3122,15 +3129,25 @@ function renderPersoModal() {
       <div class="skin-name">${s.name}</div>
       ${s.id === curSkin ? '<div style="font-size:10px;color:var(--accent)">✓ actif</div>' : ''}
     </div>`).join('');
+  const header = firstTime
+    ? `<div style="text-align:center;margin-bottom:20px">
+        <div style="font-size:32px;margin-bottom:8px">🎨</div>
+        <div style="font-family:'Russo One';font-size:18px;margin-bottom:6px">Choisis ton style !</div>
+        <div style="font-size:13px;color:var(--text2)">Tu pourras le changer à tout moment via ⚙️</div>
+       </div>`
+    : `<div class="perso-handle"></div>
+       <div style="font-family:'Russo One';font-size:17px;margin-bottom:20px;text-align:center">⚙️ Mon style</div>`;
+  const footer = firstTime
+    ? `<button class="btn-submit" style="margin-top:16px" onclick="closePerso()">C'est parti ! 🚀</button>`
+    : `<div class="perso-stitle">Mode d'affichage</div>
+       <button class="perso-mode-btn" onclick="toggleTheme();renderPersoModal()">
+         ${curTheme === 'dark' ? '☀️ Passer en mode clair' : '🌙 Passer en mode sombre'}
+       </button>`;
   document.getElementById('perso-content').innerHTML = `
-    <div class="perso-handle"></div>
-    <div style="font-family:'Russo One';font-size:17px;margin-bottom:20px;text-align:center">⚙️ Mon style</div>
+    ${header}
     <div class="perso-stitle">Thème</div>
     <div class="skin-grid">${cards}</div>
-    <div class="perso-stitle">Mode d'affichage</div>
-    <button class="perso-mode-btn" onclick="toggleTheme();renderPersoModal()">
-      ${curTheme === 'dark' ? '☀️ Passer en mode clair' : '🌙 Passer en mode sombre'}
-    </button>`;
+    ${footer}`;
 }
 
 function applyTheme(t) {
