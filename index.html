@@ -2669,6 +2669,14 @@ function renderCreateChildSection(currentEnfantCode, nbEnfants, currentEnfant) {
               🔗 Copier le lien
             </button>
           </div>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button onclick="resetChildProgress('${currentEnfant.code}','${currentEnfant.prenom}')" style="flex:1;padding:6px 14px;border-radius:var(--r-sm);background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.3);color:var(--gold);font-size:12px;font-weight:800;cursor:pointer">
+              🔁 Réinitialiser
+            </button>
+            <button onclick="deleteChild('${currentEnfant.code}','${currentEnfant.prenom}')" style="flex:1;padding:6px 14px;border-radius:var(--r-sm);background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.3);color:var(--red);font-size:12px;font-weight:800;cursor:pointer">
+              🗑️ Supprimer
+            </button>
+          </div>
         </div>` : ''}
       ${canCreate ? `
         <div class="obj-form" style="margin-top:8px">
@@ -2734,6 +2742,38 @@ async function createChildAccount(currentEnfantCode) {
     // Mettre à jour la liste en mémoire et recharger le dashboard
     if (!_allChildrenCodes.includes(code)) _allChildrenCodes.push(code);
     setTimeout(() => loadDashboard(code), 1200);
+  } catch(e) {
+    toast('❌ Erreur : ' + (e.message || 'Vérifiez la connexion'));
+  }
+}
+
+async function resetChildProgress(code, prenom) {
+  if (!confirm(`⚠️ Réinitialiser toute la progression de ${prenom} ?\n\nXP, niveau, missions, badges, streak... tout sera effacé.\nCette action est irréversible.`)) return;
+  try {
+    await sb.from('progression').delete().eq('enfant_code', code);
+    await sb.from('sessions').delete().eq('enfant_code', code);
+    toast('✅ Progression de ' + prenom + ' réinitialisée.');
+    loadDashboard(code);
+  } catch(e) {
+    toast('❌ Erreur : ' + (e.message || 'Vérifiez la connexion'));
+  }
+}
+
+async function deleteChild(code, prenom) {
+  if (!confirm(`⚠️ Supprimer le compte de ${prenom} ?\n\nToutes ses données (progression, sessions) seront supprimées définitivement.\nCette action est irréversible.`)) return;
+  if (!confirm(`Confirmer la suppression de ${prenom} ? (dernière chance)`)) return;
+  try {
+    await sb.from('progression').delete().eq('enfant_code', code);
+    await sb.from('sessions').delete().eq('enfant_code', code);
+    await sb.from('parents').delete().eq('enfant_code', code);
+    await sb.from('enfants').delete().eq('code', code);
+    _allChildrenCodes = _allChildrenCodes.filter(c => c !== code);
+    toast('✅ Compte de ' + prenom + ' supprimé.');
+    if (_allChildrenCodes.length > 0) {
+      loadDashboard(_allChildrenCodes[0]);
+    } else {
+      logoutParent();
+    }
   } catch(e) {
     toast('❌ Erreur : ' + (e.message || 'Vérifiez la connexion'));
   }
