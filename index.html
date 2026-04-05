@@ -416,16 +416,16 @@ input,textarea{font-family:'Nunito',sans-serif;-webkit-user-select:text;user-sel
 <div class="screen" id="screen-login-enfant">
   <div class="login-box">
     <div class="login-icon">🎮</div>
-    <div class="login-title">Connexion élève</div>
+    <div class="login-title">Connexion joueur</div>
     <p class="login-sub">Entre ton code pour accéder à tes missions</p>
     <div class="code-hint">
       <strong>Ton code :</strong> demande-le à un adulte.<br>
-      Exemple : <strong>MARIUS-2025</strong>
+      Exemple : <strong>TONPRENOM-ABC4E</strong>
     </div>
     <div id="err-enfant" class="err-msg"></div>
     <div class="field">
       <label>Mon code</label>
-      <input type="text" id="input-code" placeholder="Ex: MARIUS-2025"
+      <input type="text" id="input-code" placeholder="Ex: TONPRENOM-ABC4E"
         autocomplete="off" autocorrect="off" autocapitalize="none"
         spellcheck="false" maxlength="30" style="text-transform:none">
     </div>
@@ -653,7 +653,10 @@ input,textarea{font-family:'Nunito',sans-serif;-webkit-user-select:text;user-sel
       <h2>📊 Tableau de bord</h2>
       <div class="dash-child" id="dash-child-name">Chargement...</div>
     </div>
-    <button class="btn-logout" onclick="logoutParent()" style="font-size:12px">Déconnexion</button>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button onclick="loadDashboard(_curDashCode)" style="padding:6px 12px;border-radius:var(--r-sm);background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.25);color:var(--accent);font-size:12px;font-weight:800;cursor:pointer">🔄</button>
+      <button class="btn-logout" onclick="logoutParent()" style="font-size:12px">Déconnexion</button>
+    </div>
   </div>
   <div class="dash-body" id="dash-body">
     <div class="dash-loading">Chargement des données...</div>
@@ -1970,6 +1973,7 @@ let QS = null;
 let CUR_MID = null;
 let BOSS_MODE = false;
 let _parentEmail = '';
+let _curDashCode = '';
 let _parentEnfantCode = '';
 let _allChildrenCodes = [];
 let FILTER = 'all';
@@ -2131,6 +2135,7 @@ async function logoutParent() {
 // DASHBOARD PARENT
 // ══════════════════════════════════════════
 async function loadDashboard(code) {
+  _curDashCode = code;
   const body = document.getElementById('dash-body');
   body.innerHTML = '<div class="dash-loading">Chargement...</div>';
   await loadObjConfigParent(code);
@@ -2656,9 +2661,14 @@ function renderCreateChildSection(currentEnfantCode, nbEnfants, currentEnfant) {
           <span style="font-size:11px;color:var(--text2);margin-top:4px;display:block">
             Lien : ${getAppUrl()}?code=${currentEnfant.code}
           </span>
-          <button onclick="copyLink('${currentEnfant.code}')" style="margin-top:8px;padding:6px 14px;border-radius:var(--r-sm);background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.25);color:var(--accent);font-size:12px;font-weight:800;cursor:pointer">
-            📋 Copier le lien élève
-          </button>
+          <div style="display:flex;gap:8px;margin-top:8px">
+            <button onclick="copyCode('${currentEnfant.code}')" style="flex:1;padding:6px 14px;border-radius:var(--r-sm);background:rgba(124,58,237,.1);border:1px solid rgba(124,58,237,.3);color:var(--accent2);font-size:12px;font-weight:800;cursor:pointer">
+              📋 Copier le code
+            </button>
+            <button onclick="copyLink('${currentEnfant.code}')" style="flex:1;padding:6px 14px;border-radius:var(--r-sm);background:rgba(0,212,255,.1);border:1px solid rgba(0,212,255,.25);color:var(--accent);font-size:12px;font-weight:800;cursor:pointer">
+              🔗 Copier le lien
+            </button>
+          </div>
         </div>` : ''}
       ${canCreate ? `
         <div class="obj-form" style="margin-top:8px">
@@ -2727,6 +2737,20 @@ async function createChildAccount(currentEnfantCode) {
   } catch(e) {
     toast('❌ Erreur : ' + (e.message || 'Vérifiez la connexion'));
   }
+}
+
+function copyCode(code) {
+  navigator.clipboard.writeText(code).then(() => {
+    toast('📋 Code copié : ' + code);
+  }).catch(() => {
+    const el = document.createElement('textarea');
+    el.value = code;
+    document.body.appendChild(el);
+    el.select();
+    document.execCommand('copy');
+    document.body.removeChild(el);
+    toast('📋 Code copié : ' + code);
+  });
 }
 
 function copyLink(code) {
