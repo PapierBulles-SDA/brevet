@@ -2192,19 +2192,20 @@ async function loginParent() {
   const { data, error } = await sb.auth.signInWithPassword({ email, password: pwd });
   btn.disabled = false; btn.textContent = 'Accéder au tableau de bord →';
   if (error) { showErr('err-parent', '❌ Email ou mot de passe incorrect.'); return; }
-  const parent = await getParent(email);
-  // Accepter si compte Auth existe même sans ligne parents (nouveau parent sans enfant)
   _parentEmail = email;
-  _parentEnfantCode = parent ? parent.enfant_code : null;
-  // Charger tous les enfants liés
+  // Charger tous les enfants liés (filtre les NULL)
   const allChildren = await getAllChildren(email);
   _allChildrenCodes = allChildren.map(r => r.enfant_code).filter(Boolean);
+  _parentEnfantCode = _allChildrenCodes[0] || null;
   go('dashboard');
   if (_allChildrenCodes.length > 0) {
     loadDashboard(_allChildrenCodes[0]);
   } else {
-    // Nouveau parent sans enfant : afficher directement la création
-    loadDashboardEmpty();
+    // Nouveau parent sans enfant encore
+    const body = document.getElementById('dash-body');
+    document.getElementById('dash-child-name').textContent = 'Aucun élève encore';
+    body.innerHTML = renderCreateChildSection(null, 0, null)
+      + '<div class="dash-empty">Créez votre premier élève ci-dessus !</div>';
   }
 }
 
@@ -2216,13 +2217,6 @@ async function logoutParent() {
 // ══════════════════════════════════════════
 // DASHBOARD PARENT
 // ══════════════════════════════════════════
-async function loadDashboardEmpty() {
-  const body = document.getElementById('dash-body');
-  document.getElementById('dash-child-name').textContent = 'Aucun élève encore';
-  const createHTML = renderCreateChildSection(null, 0, null);
-  body.innerHTML = createHTML + '<div class="dash-empty">Créez votre premier élève ci-dessus pour commencer !</div>';
-}
-
 async function loadDashboard(code) {
   _curDashCode = code;
   const body = document.getElementById('dash-body');
@@ -2740,7 +2734,7 @@ function getAppUrl() {
 }
 
 function renderCreateChildSection(currentEnfantCode, nbEnfants, currentEnfant) {
-  const canCreate = nbEnfants < 2;
+  const canCreate = nbEnfants < 4;
   return `
     <div class="dash-obj-config" style="margin-bottom:14px">
       <div class="dash-obj-title">👶 Gestion des comptes élèves</div>
@@ -2777,7 +2771,7 @@ function renderCreateChildSection(currentEnfantCode, nbEnfants, currentEnfant) {
           </button>
         </div>` : `
         <p style="font-size:12px;color:var(--text2);margin-top:8px">
-          ⚠️ Maximum 2 comptes élèves par parent atteint.
+          ⚠️ Maximum 4 comptes élèves par parent atteint.
         </p>`}
       <div id="new-child-result" style="margin-top:10px"></div>
     </div>`;
@@ -2791,8 +2785,8 @@ async function createChildAccount(currentEnfantCode) {
   try {
     const { data: existing } = await sb.from('parents')
       .select('enfant_code').eq('email', _parentEmail);
-    if (existing && existing.length >= 2) {
-      toast('❌ Maximum 2 comptes élèves par parent.');
+    if (existing && existing.length >= 4) {
+      toast('❌ Maximum 4 comptes élèves par parent.');
       return;
     }
   } catch(e) {}
